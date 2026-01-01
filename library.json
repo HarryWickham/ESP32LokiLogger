@@ -1,0 +1,45 @@
+{
+  "name": "LokiLogger",
+  "version": "0.0.1",
+  "description": "A library for sending structured logs to Grafana Loki",
+  "keywords": [
+    "esp32",
+    "logging",
+    "grafana",
+    "loki",
+    "opentelemetry",
+    "telemetry",
+    "monitoring",
+    "iot"
+  ],
+  "authors": [
+    {
+      "name": "Harry Wickham",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/HarryWickham/ESP32LokiLogger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HarryWickham/ESP32LokiLogger.git"
+  },
+  "frameworks": [
+    "arduino"
+  ],
+  "platforms": [
+    "espressif32"
+  ],
+  "dependencies": [
+    {
+      "name": "ArduinoJson",
+      "version": "^7.2.0"
+    }
+  ],
+  "export": {
+    "include": [
+      "src/*",
+      "library.json"
+    ]
+  }
+}

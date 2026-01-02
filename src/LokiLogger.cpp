@@ -69,6 +69,10 @@ bool LokiLogger::begin(const char *lokiUrl, const char *lokiUser, const char *lo
 
 LogResult LokiLogger::log(LogLevel level, const char *message, bool immediateFlush)
 {
+
+  // Print to Serial with color
+  Serial.printf("\033[%sm[%s] %s\033[0m\n", _getColorCode(level), _stringLevel(level), message);
+
   if (!_initialized)
   {
     return LogResult::NOT_INITIALIZED;
@@ -88,9 +92,6 @@ LogResult LokiLogger::log(LogLevel level, const char *message, bool immediateFlu
   _buffer[_bufferIndex].message[MAX_MESSAGE_LENGTH - 1] = '\0';
   _getTimestamp(_buffer[_bufferIndex].timestamp, MAX_TIMESTAMP_LENGTH);
   _bufferIndex++;
-
-  // Print to Serial with color
-  Serial.printf("\033[%sm[%s] %s\033[0m\n", _getColorCode(level), _stringLevel(level), message);
 
   if (immediateFlush)
   {

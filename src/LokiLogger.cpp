@@ -1,5 +1,4 @@
 #include <ArduinoJson.h>
-
 #include "LokiLogger.h"
 
 // Constructor

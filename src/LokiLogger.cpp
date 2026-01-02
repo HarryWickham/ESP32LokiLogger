@@ -40,6 +40,18 @@ bool LokiLogger::begin(const char *lokiUrl, const char *lokiUser, const char *lo
   return _initialized;
 }
 
+bool LokiLogger::begin(const char *lokiUrl, const char *lokiUser, const char *lokiApiKey, const char *serviceName, const char *deviceLabel)
+{
+  _lokiUrl = String(lokiUrl);
+  _lokiUser = String(lokiUser);
+  _lokiApiKey = String(lokiApiKey);
+  _serviceName = String(serviceName);
+  _deviceLabel = String(deviceLabel);
+
+  _initialized = true;
+  return _initialized;
+}
+
 bool LokiLogger::log(LogLevel level, const char *message)
 {
   if (!_initialized)

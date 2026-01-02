@@ -35,6 +35,19 @@ public:
   bool begin(const char *lokiUrl, const char *lokiUser, const char *lokiApiKey, const char *serviceName, const char *deviceLabel, const char *ntpServer);
 
   /**
+   * @brief Initialise connection to Loki server without NTP time configuration
+   *
+   * @param lokiUrl The URL of the Loki server
+   * @param lokiUser The username for Loki authentication
+   * @param lokiApiKey The API key for Loki authentication
+   * @param serviceName The name of the service sending logs
+   * @param deviceLabel The label identifying the device
+   * @return true
+   * @return false
+   */
+  bool begin(const char *lokiUrl, const char *lokiUser, const char *lokiApiKey, const char *serviceName, const char *deviceLabel);
+
+  /**
    * @brief Log a message with a specified log level
    *
    * @param level The severity level of the log message

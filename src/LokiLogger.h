@@ -14,6 +14,27 @@ enum class LogLevel : uint8_t
   CRITICAL = 4 // Critical error conditions
 };
 
+enum class LogResult : uint8_t
+{
+  SUCCESS = 0,
+  BUFFERED = 1,
+  NOT_INITIALIZED = 2,
+  WIFI_DISCONNECTED = 3,
+  HTTP_ERROR = 4,
+  INVALID_RESPONSE = 5
+};
+
+static const uint8_t MAX_BUFFER_SIZE = 10;
+static const uint16_t MAX_MESSAGE_LENGTH = 256;
+static const uint16_t MAX_TIMESTAMP_LENGTH = 30;
+
+struct LogEntry
+{
+  LogLevel level;
+  char message[MAX_MESSAGE_LENGTH];
+  char timestamp[MAX_TIMESTAMP_LENGTH];
+};
+
 class LokiLogger
 {
 public:
@@ -52,19 +73,17 @@ public:
    *
    * @param level The severity level of the log message
    * @param message The log message content
-   * @return true
-   * @return false
+   * @param immediateFlush If true, flush the buffer immediately after adding this log
+   * @return LogResult: BUFFERED if added to buffer (or SUCCESS if immediateFlush succeeds), or error codes
    */
-  bool log(LogLevel level, const char *message);
+  LogResult log(LogLevel level, const char *message, bool immediateFlush = false);
 
   /**
-   * @brief Format a log entry as a JSON string for Loki
+   * @brief Flush the buffered logs to Loki
    *
-   * @param level The severity level of the log message
-   * @param message The log message content
-   * @return String The formatted JSON log entry
+   * @return LogResult indicating success or specific error
    */
-  String _formatLogEntry(LogLevel level, const char *message);
+  LogResult flush();
 
 private:
   String _lokiUrl;
@@ -75,8 +94,16 @@ private:
   HTTPClient _httpClient;
   uint16_t _bufferSize;
   bool _initialized;
+  uint8_t _maxRetries;
+  uint16_t _retryDelayMs;
+  LogEntry _buffer[MAX_BUFFER_SIZE];
+  uint8_t _bufferIndex;
 
-  String _stringLevel(LogLevel level);
+  const char *_stringLevel(LogLevel level);
+  String _formatBatchLogEntry();
+  void _getTimestamp(char *buffer, size_t size);
+  LogResult _sendHttpRequest(const String &payload);
+  const char *_getColorCode(LogLevel level);
 };
 
 #endif // LOKI_LOGGER_H
